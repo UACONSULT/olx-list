@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OLX Application</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
+
+  <!-- JQuery -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
+
+<style>
+
+header {
+    text-align: center;
+}
+
+a {
+  color:white;
+}
+
+button>i {
+   font-size: 10px; 
+}
+
+#main-title {
+  margin-block: 20px 40px;
+}
+
+#cap-block {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+  width: 300px;
+  margin: 20px;
+}
+
+.cap-element-title{
+    color:coral;;
+}
+
+.cap-element>i {
+    font-size: 60px;
+}
+
+.cap-element-desc {
+    color: lightgray;
+}
+.element-cat {
+  color: grey;
+
+}
+
+.element-location {}
+
+.element-doa {
+  color: grey;
+}
+
+.element-price {
+  color:limegreen;
+  font-size: 700;
+  font-size: 30px;
+}
+
+.default-color {
+  background-color:coral; !important;
+}
+
+</style>
+</head>
+<body>
+  
+  <nav class="navbar navbar-dark default-color justify-content-between">
+    <div class="container">
+      <a class="navbar-brand" href="#">OLX Scrapper</a>
+      <div><a href="#">Home</a></div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <header>
+    <h1 id='main-title'>Что будем искать на OLX?</h1>
+    
+    <div id='cap-block'>
+
+      <div class='cap-element'>
+        <i class="fab fa-algolia"></i>
+        <p class='cap-element-title'>Fast</p>
+        <p class='cap-element-desc'>Some useless text here))</p>
+      </div>
+      
+      <div class='cap-element'>
+            <i class="fas fa-archive"></i>
+            <p class='cap-element-title'>Huge amount of products</p>
+            <p class='cap-element-desc'>Some useless text here))</p>
+        </div>
+    
+        <div class='cap-element'>
+                <i class="fas fa-bolt"></i>
+                <p class='cap-element-title'>Smooth</p>
+                <p class='cap-element-desc'>Some useless text here))</p>
+        </div>
+
+    </div>
+    
+    <form method="post" action="{% url 'search' %}">
+        {% csrf_token %}
+        <div class="md-form">
+            <input name='q' placeholder="Product, good, service ..." type="text" id="form1" class="form-control">        
+            <button type="submit" class="btn btn-default">Искать</button>
+        </div>
+    </form>
+
+</header>
+  
+
+
+
+
+    <h1 class='text-center'>{{ q|truncatechars:30 }}</h1>
+    <div class="row">   
+        {% if data %}
+        {% for element in data %}
+        <div class="card">
+            <div class="view overlay">
+              <img class="card-img-top" 
+              {% if element.image %} 
+                src='{{ element.image }}'
+              {% else %}
+                src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
+              {% endif %}
+              alt="{{ element.title }}">
+              <a href="{{ element.link }}">
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+          
+            <div class="card-body">
+              <h4 class="card-title element-title">{{ element.title }} <span class='element-price'>{{ element.price }}</span></h4>
+              <p class="card-text element-content">
+                <p class='element-cat'>{{ element.cat }}</p>  
+                <p class='element-location'>Локация: {{ element.location }} <i class="fas fa-location-arrow"></i></p>  
+                <p class='element-doa'>Добавлено: {{ element.doa }} <i class="fas fa-calendar-day"></i></p>              
+            </p>
+              <a href="{{ element.link }}" class="btn btn-primary">ПЕРЕЙТИ</a>          
+            </div>  
+        </div>
+        {% endfor%}
+        {% endif %}
+    </div>
+    </div>
+
+</body>
+</html>
